@@ -42,7 +42,7 @@ const ImageViewer = ({ imageList }: TImageViewer) => {
         </div>
       </Grid>
       <Grid item container xs={12} spacing={2} className={styles.imageViewer}>
-        {imageList.map((imageUrl: string) => (
+        {imageList?.map((imageUrl: string) => (
           <Grid key={imageUrl} item>
             <ButtonImage
               url={imageUrl}
