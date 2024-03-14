@@ -1,0 +1,17 @@
+.divImage {
+  cursor: "pointer";
+  padding: 0;
+  height: 60px;
+  border: 1.5px solid #ffff;
+}
+
+.divImage:hover{
+  cursor: pointer;
+  opacity: 0.5 !important;
+  transition: 0.01s;
+  border: 1.5px solid #2C2A29;
+}
+
+.imageFocus{
+  border: 1.5px solid #2C2A29;
+}
