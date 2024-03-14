@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 // @packages
@@ -23,14 +24,21 @@ const ImageViewer = ({ imageList }: TImageViewer) => {
   };
   return (
     <Grid container spacing={1}>
-      <Grid className={styles.imageViewer} item xs={12}>
-        <Image
-          src={currentImage}
-          alt="Screenshots of the dashboard"
-          width={600}
-          height={600}
-          className="block md:hidden"
-        />
+      <Grid
+        className={styles.imageViewer}
+        item
+        xs={12}
+        style={{
+          position: "relative",
+        }}
+      >
+        <div className={styles.productImageWrapper}>
+          <img
+            className={styles.productImage}
+            src={currentImage}
+            alt="Product Image"
+          />
+        </div>
       </Grid>
       <Grid item container xs={12} spacing={2} className={styles.imageViewer}>
         {imageList.map((imageUrl: string) => (
