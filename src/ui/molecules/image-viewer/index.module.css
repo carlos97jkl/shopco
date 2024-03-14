@@ -1,0 +1,10 @@
+.imageViewer {
+  display: flex;
+}
+
+@media only screen and (max-width: 900px) {
+  .imageViewer {
+    display: flex;
+    justify-content: center;
+  }
+}
