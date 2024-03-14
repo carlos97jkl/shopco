@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 // @packages
@@ -17,7 +16,9 @@ type TImageViewer = {
 };
 
 const ImageViewer = ({ imageList }: TImageViewer) => {
-  const [currentImage, setCurrentImage] = useState<string>(imageList[0] || "");
+  const [currentImage, setCurrentImage] = useState<string>(
+    imageList ? imageList[0] : "",
+  );
 
   const changeImage = (url: string) => {
     setCurrentImage(url);
@@ -33,7 +34,7 @@ const ImageViewer = ({ imageList }: TImageViewer) => {
         }}
       >
         <div className={styles.productImageWrapper}>
-          <img
+          <Image
             className={styles.productImage}
             src={currentImage}
             alt="Product Image"
