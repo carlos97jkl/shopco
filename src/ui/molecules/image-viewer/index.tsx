@@ -17,7 +17,7 @@ type TImageViewer = {
 };
 
 const ImageViewer = ({ imageList }: TImageViewer) => {
-  const [currentImage, setCurrentImage] = useState<string>(imageList[0]);
+  const [currentImage, setCurrentImage] = useState<string>(imageList[0] || "");
 
   const changeImage = (url: string) => {
     setCurrentImage(url);
