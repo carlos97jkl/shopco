@@ -19,11 +19,11 @@ const ButtonImage = ({ url, onClick, isImageSelected }: TButtonImage) => {
       ])}
     >
       <Image
-        src={url}
         alt="Screenshots of the dashboard"
-        width={64}
-        height={60}
         className="block md:hidden"
+        height={60}
+        src={url}
+        width={64}
       />
     </div>
   );
