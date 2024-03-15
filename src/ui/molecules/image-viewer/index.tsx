@@ -12,13 +12,12 @@ import styles from "./index.module.css";
 import { useState } from "react";
 
 type TImageViewer = {
-  imageList: string[];
+  imageList?: string[];
 };
 
-const ImageViewer = ({ imageList }: TImageViewer) => {
-  const [currentImage, setCurrentImage] = useState<string>(
-    imageList ? imageList[0] : "",
-  );
+const ImageViewer = ({ imageList = [] }: TImageViewer) => {
+  const [currentImage, setCurrentImage] = useState<string>("");
+  console.log("this is the image", currentImage);
 
   const changeImage = (url: string) => {
     setCurrentImage(url);
@@ -34,10 +33,12 @@ const ImageViewer = ({ imageList }: TImageViewer) => {
         }}
       >
         <div className={styles.productImageWrapper}>
-          <Image
+          <img
             className={styles.productImage}
-            src={currentImage}
+            src={currentImage || imageList[1]}
             alt="Product Image"
+            width="100%"
+            height="100%"
           />
         </div>
       </Grid>
