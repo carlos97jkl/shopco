@@ -10,9 +10,15 @@ type TProductInfo = {
   title: string;
   price: string;
   description: string;
+  changeModal: (value: boolean) => void;
 };
 
-const ProductInfo = ({ title, price, description }: TProductInfo) => {
+const ProductInfo = ({
+  title,
+  price,
+  description,
+  changeModal,
+}: TProductInfo) => {
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantity = (quantityProduct: number) => {
@@ -50,6 +56,7 @@ const ProductInfo = ({ title, price, description }: TProductInfo) => {
           color="success"
           disableElevation
           style={{ borderRadius: "10px" }}
+          onClick={() => changeModal(true)}
         >
           Pay with credit card - {`$${+price * quantity}.00`}
         </Button>

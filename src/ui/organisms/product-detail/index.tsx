@@ -1,3 +1,4 @@
+"use client";
 // @packages
 import { getProduct } from "@/app/lib/actions";
 import ImageViewer from "@/ui/molecules/image-viewer";
@@ -8,22 +9,46 @@ import ProductInfo from "@/ui/molecules/product-info";
 
 // @styles
 import styles from "./index.module.css";
-const ProductDetail = async () => {
-  const product = await getProduct();
+import ModalCheckout from "@/ui/molecules/modal-checkout";
+import { useEffect, useState } from "react";
+const ProductDetail = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [product, setProduct] = useState({} as any);
+
+  const getProductData = async () => {
+    const productsData = await getProduct();
+    console.log(productsData);
+    setProduct(productsData);
+  };
+
+  const changeModalState = (modal: boolean) => {
+    setOpenModal(modal);
+  };
+
+  useEffect(() => {
+    getProductData();
+  }, []);
 
   return (
-    <Grid container mt="30px">
-      <Grid item xs={12} md={8}>
-        <ImageViewer imageList={product.images} />
+    <>
+      <ModalCheckout
+        isOpenModal={openModal}
+        setIsOpenModal={changeModalState}
+      />
+      <Grid container mt="30px">
+        <Grid item xs={12} md={8}>
+          <ImageViewer imageList={product.images} />
+        </Grid>
+        <Grid item xs={12} md={4} className={styles.productInfoContainer}>
+          <ProductInfo
+            changeModal={changeModalState}
+            title={product.title}
+            price={product.price}
+            description={product.description}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={4} className={styles.productInfoContainer}>
-        <ProductInfo
-          title={product.title}
-          price={product.price}
-          description={product.description}
-        />
-      </Grid>
-    </Grid>
+    </>
   );
 };
 
