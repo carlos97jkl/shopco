@@ -36,6 +36,9 @@ const ProductDetail = () => {
         setIsOpenModal={changeModalState}
       />
       <Grid container mt="30px">
+        <Grid item xs={12} display={{ xs: "flex", md: "none" }}>
+          <Typography variant="h4">{product.title}</Typography>
+        </Grid>
         <Grid item xs={12} md={8}>
           <ImageViewer imageList={product.images} />
         </Grid>

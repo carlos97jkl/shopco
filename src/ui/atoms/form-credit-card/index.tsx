@@ -53,7 +53,7 @@ const FormCreditCard = () => {
             size="small"
             fullWidth
             variant="outlined"
-            label="Expery date"
+            label="Expiry date"
           />
         </Grid>
         <Grid item xs={8}>

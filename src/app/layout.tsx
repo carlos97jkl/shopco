@@ -8,6 +8,8 @@ import Divider from "@mui/material/Divider";
 
 // @styles
 import "./globals.css";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./lib/utils/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,27 +27,29 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <Grid
-            container
-            justifyContent="center"
-            mt="10px"
-            style={{
-              maxWidth: "1200px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              padding: "10px",
-            }}
-          >
-            <Grid item xs={12}>
-              <Typography color="#99D1FC" variant="h4">
-                shop.co
-              </Typography>
-              <Divider />
+          <ThemeProvider theme={theme}>
+            <Grid
+              container
+              justifyContent="center"
+              mt="10px"
+              style={{
+                maxWidth: "1200px",
+                marginLeft: "auto",
+                marginRight: "auto",
+                padding: "10px",
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography color="#99D1FC" variant="h4">
+                  shop.co
+                </Typography>
+                <Divider />
+              </Grid>
+              <Grid item xs={12}>
+                {children}
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              {children}
-            </Grid>
-          </Grid>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

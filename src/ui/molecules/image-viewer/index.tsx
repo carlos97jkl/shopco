@@ -37,8 +37,6 @@ const ImageViewer = ({ imageList = [] }: TImageViewer) => {
             className={styles.productImage}
             src={currentImage || imageList[1]}
             alt="Product Image"
-            width="100%"
-            height="100%"
           />
         </div>
       </Grid>

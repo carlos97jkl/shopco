@@ -31,7 +31,7 @@ const ProductInfo = ({
 
   return (
     <Grid container gap={4}>
-      <Grid item xs={12}>
+      <Grid item xs={12} display={{ xs: "none", md: "flex" }}>
         <Typography variant="h4">{title}</Typography>
       </Grid>
       <Grid item xs={12}>
@@ -40,7 +40,6 @@ const ProductInfo = ({
         </Typography>
         <Typography variant="subtitle2">{description}</Typography>
       </Grid>
-
       <Grid item xs={12}>
         <Typography variant="subtitle1">
           <b>Price:</b>

@@ -4,9 +4,11 @@
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
   Grid,
+  IconButton,
   Step,
   StepButton,
   StepContent,
@@ -43,7 +45,12 @@ const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
   return (
     <Dialog open={isOpenModal} maxWidth="sm" fullWidth>
       <DialogTitle>
-        <Typography variant="h5">Payment Checkout</Typography>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h5">Payment Checkout</Typography>
+          <IconButton size="medium" onClick={() => setIsOpenModal(false)}>
+            <CloseIcon fontSize="medium" />
+          </IconButton>
+        </div>
       </DialogTitle>
       <DialogContent style={{ height: "400px" }}>
         <Stepper nonLinear activeStep={activeStep}>
@@ -70,10 +77,15 @@ const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
         justifyContent="space-between"
         style={{ padding: "10px 20px" }}
       >
-        <Button disabled={activeStep === 0} onClick={handleBack}>
+        <Button
+          color="primary"
+          disabled={activeStep === 0}
+          onClick={handleBack}
+        >
           <KeyboardArrowLeft /> Back
         </Button>
         <Button
+          color="primary"
           disabled={activeStep === steps.length - 1}
           onClick={handleStep(activeStep + 1)}
         >
