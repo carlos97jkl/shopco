@@ -6,10 +6,10 @@ import ImageViewer from "@/ui/molecules/image-viewer";
 // @scripts
 import { Grid, Typography } from "@mui/material";
 import ProductInfo from "@/ui/molecules/product-info";
+import ModalCheckout from "@/ui/molecules/modal-checkout";
 
 // @styles
 import styles from "./index.module.css";
-import ModalCheckout from "@/ui/molecules/modal-checkout";
 import { useEffect, useState } from "react";
 const ProductDetail = () => {
   const [openModal, setOpenModal] = useState(false);
