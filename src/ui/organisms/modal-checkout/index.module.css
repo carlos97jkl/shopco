@@ -1,0 +1,12 @@
+.dialogContent {
+  height: "400px";
+}
+
+.dialogTitle {
+  display: "flex";
+  justify-content: "space-between";
+}
+
+.bottomActions {
+  padding: "10px 20px";
+}

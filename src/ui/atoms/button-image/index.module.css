@@ -5,6 +5,10 @@
   border: 1.5px solid #ffff;
 }
 
+.imageFocus{
+  border: 1.5px solid #2C2A29;
+}
+
 .divImage:hover{
   cursor: pointer;
   opacity: 0.5 !important;
@@ -12,6 +16,3 @@
   border: 1.5px solid #2C2A29;
 }
 
-.imageFocus{
-  border: 1.5px solid #2C2A29;
-}
