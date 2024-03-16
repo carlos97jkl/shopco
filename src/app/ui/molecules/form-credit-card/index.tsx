@@ -4,19 +4,27 @@ import images from "react-payment-inputs/images";
 import { Grid, TextField } from "@mui/material";
 import { usePaymentInputs } from "react-payment-inputs";
 import { useState } from "react";
+import { savePaymentData } from "@/app/redux/slices";
+import { useDispatch, useSelector } from "react-redux";
 
 const FormCreditCard = () => {
+  const dispatch = useDispatch();
+  const {
+    cardNumber,
+    expiryDate,
+    securityCode,
+    cardholderName,
+    cardholderID,
+    numberOfPayments,
+  } = useSelector((state: any) => state.dataTransaction);
   const {
     getCVCProps,
     getCardImageProps,
     getCardNumberProps,
     getExpiryDateProps,
   } = usePaymentInputs();
-  const [cardNumber, setCardNumber] = useState();
-  const [experyDate, setExperyDate] = useState();
-  const [securityCode, setSecurityCode] = useState();
-  const handleChangeCardNumber = (event: any) => {
-    setCardNumber(event?.target?.value);
+  const handleChangeField = (propSave: string, event: any) => {
+    dispatch(savePaymentData({ prop: propSave, data: event.target.value }));
   };
   return (
     <Grid container gap={3}>
@@ -37,7 +45,7 @@ const FormCreditCard = () => {
           inputProps={{
             value: cardNumber,
             ...getCardNumberProps({
-              onChange: handleChangeCardNumber,
+              onChange: (event: any) => handleChangeField("cardNumber", event),
             }),
           }}
         />
@@ -50,9 +58,10 @@ const FormCreditCard = () => {
             size="small"
             variant="outlined"
             inputProps={{
-              value: experyDate,
+              value: expiryDate,
               ...getExpiryDateProps({
-                onChange: (event: any) => setExperyDate(event.target.value),
+                onChange: (event: any) =>
+                  handleChangeField("expiryDate", event),
               }),
             }}
           />
@@ -66,7 +75,8 @@ const FormCreditCard = () => {
             inputProps={{
               value: securityCode,
               ...getCVCProps({
-                onChange: (event: any) => setSecurityCode(event.target.value),
+                onChange: (event: any) =>
+                  handleChangeField("securityCode", event),
               }),
             }}
           />
@@ -78,6 +88,8 @@ const FormCreditCard = () => {
           label="Cardholder's name"
           size="small"
           variant="outlined"
+          value={cardholderName}
+          onChange={(event) => handleChangeField("cardholderName", event)}
         />
       </Grid>
       <Grid item xs={12}>
@@ -86,6 +98,8 @@ const FormCreditCard = () => {
           label="Cardholder ID"
           size="small"
           variant="outlined"
+          value={cardholderID}
+          onChange={(event) => handleChangeField("cardholderID", event)}
         />
       </Grid>
       <Grid item xs={12}>
@@ -94,6 +108,8 @@ const FormCreditCard = () => {
           label="Number of payments"
           size="small"
           variant="outlined"
+          value={numberOfPayments}
+          onChange={(event) => handleChangeField("numberOfPayments", event)}
         />
       </Grid>
     </Grid>

@@ -18,28 +18,33 @@ import {
 import { useState } from "react";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import FormCreditCard from "@/ui/molecules/form-credit-card";
-import BuySummary from "@/ui/molecules/buy-summary";
+import FormCreditCard from "@/app/ui/molecules/form-credit-card";
+import BuySummary from "@/app/ui/molecules/buy-summary";
+import { useSelector, useDispatch } from "react-redux";
+import { savePaymentData } from "@/app/redux/slices";
 
 // @styles
 import styles from "./index.module.css";
 
-type TModalCheckout = {
-  isOpenModal: boolean;
-  setIsOpenModal: (isOpenModal: boolean) => void;
-};
-
-const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
+const ModalCheckout = () => {
+  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
   const steps = [
     { title: "Payment Data", component: () => <FormCreditCard /> },
     { title: "Summary", component: () => <BuySummary /> },
   ];
+
+  const isOpenModal = useSelector(
+    (state: any) => state.dataTransaction.isDialogOpen,
+  );
+
+  const handleCloseModal = () => {
+    dispatch(savePaymentData({ prop: "isDialogOpen", data: false }));
+  };
+
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  console.log(activeStep);
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
@@ -50,7 +55,7 @@ const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
       <DialogTitle>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5">Payment Checkout</Typography>
-          <IconButton size="medium" onClick={() => setIsOpenModal(false)}>
+          <IconButton size="medium" onClick={handleCloseModal}>
             <CloseIcon fontSize="medium" />
           </IconButton>
         </div>
@@ -78,7 +83,7 @@ const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
       <Grid
         container
         justifyContent="space-between"
-        className={styles.bottomActions}
+        style={{ padding: "10px 20px" }}
       >
         <Button
           color="primary"

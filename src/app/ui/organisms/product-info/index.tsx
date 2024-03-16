@@ -1,25 +1,26 @@
 "use client";
 
-import QuantitySelector from "@/ui/molecules/quantity-selector";
+import { savePaymentData } from "@/app/redux/slices";
+import QuantitySelector from "@/app/ui/molecules/quantity-selector";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 type TProductInfo = {
   title: string;
   price: string;
   description: string;
-  changeModal: (value: boolean) => void;
 };
 
-const ProductInfo = ({
-  title,
-  price,
-  description,
-  changeModal,
-}: TProductInfo) => {
+const ProductInfo = ({ title, price, description }: TProductInfo) => {
   const [quantity, setQuantity] = useState(0);
+  const dispatch = useDispatch();
+
+  const handleOpenModal = () => {
+    dispatch(savePaymentData({ prop: "isDialogOpen", data: true }));
+  };
 
   const handleQuantity = (quantityProduct: number) => {
     if (quantityProduct < 0) {
@@ -55,7 +56,7 @@ const ProductInfo = ({
           color="success"
           disableElevation
           style={{ borderRadius: "10px" }}
-          onClick={() => changeModal(true)}
+          onClick={handleOpenModal}
         >
           Pay with credit card - {`$${+price * quantity}.00`}
         </Button>

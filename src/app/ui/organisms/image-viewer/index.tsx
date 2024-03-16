@@ -4,7 +4,7 @@
 import Image from "next/image";
 
 // @scripts
-import ButtonImage from "@/ui/atoms/button-image";
+import ButtonImage from "@/app/ui/atoms/button-image";
 import Grid from "@mui/material/Grid";
 
 // @styles
