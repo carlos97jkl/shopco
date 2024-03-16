@@ -18,8 +18,11 @@ import {
 import { useState } from "react";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import FormCreditCard from "@/ui/atoms/form-credit-card";
-import BuySummary from "@/ui/atoms/buy-summary";
+import FormCreditCard from "@/ui/molecules/form-credit-card";
+import BuySummary from "@/ui/molecules/buy-summary";
+
+// @styles
+import styles from "./index.module.css";
 
 type TModalCheckout = {
   isOpenModal: boolean;
@@ -52,7 +55,7 @@ const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
           </IconButton>
         </div>
       </DialogTitle>
-      <DialogContent style={{ height: "400px" }}>
+      <DialogContent className={styles.dialogContent}>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map(({ title }, index) => (
             <Step key={title} completed={activeStep > index}>
@@ -75,7 +78,7 @@ const ModalCheckout = ({ isOpenModal, setIsOpenModal }: TModalCheckout) => {
       <Grid
         container
         justifyContent="space-between"
-        style={{ padding: "10px 20px" }}
+        className={styles.bottomActions}
       >
         <Button
           color="primary"

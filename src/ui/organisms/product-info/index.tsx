@@ -1,6 +1,6 @@
 "use client";
 
-import QuantitySelector from "@/ui/atoms/quantity-selector";
+import QuantitySelector from "@/ui/molecules/quantity-selector";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";

@@ -1,16 +1,17 @@
 "use client";
 // @packages
+import ImageViewer from "@/ui/organisms/image-viewer";
 import { getProduct } from "@/app/lib/actions";
-import ImageViewer from "@/ui/molecules/image-viewer";
+import { useEffect, useState } from "react";
 
 // @scripts
+import ModalCheckout from "@/ui/organisms/modal-checkout";
+import ProductInfo from "@/ui/organisms/product-info";
 import { Grid, Typography } from "@mui/material";
-import ProductInfo from "@/ui/molecules/product-info";
-import ModalCheckout from "@/ui/molecules/modal-checkout";
 
 // @styles
-import styles from "./index.module.css";
-import { useEffect, useState } from "react";
+import styles from "./page.module.css";
+
 const Home = () => {
   const [openModal, setOpenModal] = useState(false);
   const [product, setProduct] = useState({} as any);

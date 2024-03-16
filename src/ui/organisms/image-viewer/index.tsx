@@ -17,26 +17,19 @@ type TImageViewer = {
 
 const ImageViewer = ({ imageList = [] }: TImageViewer) => {
   const [currentImage, setCurrentImage] = useState<string>("");
-  console.log("this is the image", currentImage);
 
   const changeImage = (url: string) => {
     setCurrentImage(url);
   };
+
   return (
     <Grid container spacing={1}>
-      <Grid
-        className={styles.imageViewer}
-        item
-        xs={12}
-        style={{
-          position: "relative",
-        }}
-      >
+      <Grid className={styles.imageViewer} item xs={12}>
         <div className={styles.productImageWrapper}>
           <img
+            alt="Product Image"
             className={styles.productImage}
             src={currentImage || imageList[1]}
-            alt="Product Image"
           />
         </div>
       </Grid>
@@ -44,9 +37,9 @@ const ImageViewer = ({ imageList = [] }: TImageViewer) => {
         {imageList?.map((imageUrl: string) => (
           <Grid key={imageUrl} item>
             <ButtonImage
-              url={imageUrl}
-              onClick={() => changeImage(imageUrl)}
               isImageSelected={currentImage === imageUrl}
+              onClick={() => changeImage(imageUrl)}
+              url={imageUrl}
             />
           </Grid>
         ))}
