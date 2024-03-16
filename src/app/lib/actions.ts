@@ -19,3 +19,13 @@ export async function getProduct() {
     }, 300);
   });
 }
+
+export async function verifyPay(dataPayment: any) {
+  const mockDataVerify = {
+    cardNumber: "3400 000000 00000",
+    expiryDate: "02 / 29",
+    securityCode: "4444",
+  };
+
+  return mockDataVerify.cardNumber === dataPayment.cardNumber;
+}

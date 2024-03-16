@@ -15,6 +15,9 @@ const initialState: { [key: string]: boolean | string | number } = {
   numberOfPayments: 1,
   isCheckedData: false,
   isDialogOpen: false,
+  price: 0,
+  total: 0,
+  nameProduct: "",
 };
 
 const getTransactionData = () => {
@@ -26,7 +29,7 @@ const storeTransactionData = (dataSave: any) => {
   localStorage.setItem(localStorageKey, JSON.stringify(dataSave));
 };
 
-const slices = createSlice({
+const transaction = createSlice({
   name: "counter",
   initialState: getTransactionData(),
   reducers: {
@@ -37,12 +40,12 @@ const slices = createSlice({
       state[action.payload.prop] = action.payload.data;
       storeTransactionData(state);
     },
-    deletePaymentData: (state) => {
-      state = initialState;
+    deletePaymentData: () => {
       storeTransactionData(initialState);
+      return initialState;
     },
   },
 });
 
-export const { savePaymentData, deletePaymentData } = slices.actions;
-export default slices.reducer;
+export const { savePaymentData, deletePaymentData } = transaction.actions;
+export default transaction.reducer;

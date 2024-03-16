@@ -4,7 +4,7 @@ import images from "react-payment-inputs/images";
 import { Grid, TextField } from "@mui/material";
 import { usePaymentInputs } from "react-payment-inputs";
 import { useState } from "react";
-import { savePaymentData } from "@/app/redux/slices";
+import { savePaymentData } from "@/app/redux/slices/transaction";
 import { useDispatch, useSelector } from "react-redux";
 
 const FormCreditCard = () => {

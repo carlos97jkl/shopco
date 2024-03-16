@@ -21,7 +21,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import FormCreditCard from "@/app/ui/molecules/form-credit-card";
 import BuySummary from "@/app/ui/molecules/buy-summary";
 import { useSelector, useDispatch } from "react-redux";
-import { savePaymentData } from "@/app/redux/slices";
+import { savePaymentData } from "@/app/redux/slices/transaction";
 
 // @styles
 import styles from "./index.module.css";

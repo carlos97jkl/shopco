@@ -1,7 +1,34 @@
+"use client";
+import { verifyPay } from "@/app/lib/actions";
+import { openSnackbar } from "@/app/redux/slices/alert";
 import { Button, Divider, Grid } from "@mui/material";
 import { Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
 const BuySummary = () => {
+  const {
+    cardNumber,
+    expiryDate,
+    numberOfPayments,
+    price,
+    quantity,
+    securityCode,
+    total,
+    nameProduct,
+  } = useSelector((state: any) => state.dataTransaction);
+  const dispatch = useDispatch();
+  const handleProcessPayment = async () => {
+    const res = await verifyPay({
+      cardNumber: cardNumber,
+      expiryDate: expiryDate,
+      securityCode: securityCode,
+    });
+    if (res) {
+      alert("Payment Successful");
+    } else {
+      dispatch(openSnackbar("Payment Failed"));
+    }
+  };
   return (
     <Grid container xs={12} gap={2}>
       <Grid
@@ -12,7 +39,7 @@ const BuySummary = () => {
         <Typography>
           <b>Product:</b>
         </Typography>
-        <Typography>buzo</Typography>
+        <Typography>{nameProduct}</Typography>
       </Grid>
       <Grid
         item
@@ -22,7 +49,12 @@ const BuySummary = () => {
         <Typography>
           <b>Price:</b>
         </Typography>
-        <Typography>$98.00</Typography>
+        <Typography>
+          {Number(price?.toFixed(2)).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })}
+        </Typography>
       </Grid>
       <Grid
         item
@@ -32,7 +64,7 @@ const BuySummary = () => {
         <Typography>
           <b>Quantity:</b>
         </Typography>
-        <Typography>3</Typography>
+        <Typography>{quantity}</Typography>
       </Grid>
       <Grid xs={12}>
         <Divider />
@@ -45,7 +77,16 @@ const BuySummary = () => {
         <Typography>
           <b>Payments:</b>
         </Typography>
-        <Typography>36x $340.00</Typography>
+        <Typography>
+          {numberOfPayments}x{" "}
+          {Number((total / numberOfPayments).toFixed(2)).toLocaleString(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+            },
+          )}
+        </Typography>
       </Grid>
       <Grid
         item
@@ -55,7 +96,7 @@ const BuySummary = () => {
         <Typography>
           <b>Payment Method:</b>
         </Typography>
-        <Typography>Credit Card - Amex</Typography>
+        <Typography>Credit Card</Typography>
       </Grid>
       <Grid xs={12}>
         <Divider />
@@ -68,10 +109,16 @@ const BuySummary = () => {
         <Typography>
           <b>Total:</b>
         </Typography>
-        <Typography>$34000.00</Typography>
+        <Typography>
+          {Number(total.toFixed(2)).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })}
+        </Typography>
       </Grid>
       <Grid xs={12} padding="20px 50px 0px 50px" marginTop="5px">
         <Button
+          onClick={handleProcessPayment}
           fullWidth
           variant="contained"
           color="success"

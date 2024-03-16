@@ -1,12 +1,11 @@
 "use client";
 
-import { savePaymentData } from "@/app/redux/slices";
+import { savePaymentData } from "@/app/redux/slices/transaction";
 import QuantitySelector from "@/app/ui/molecules/quantity-selector";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 type TProductInfo = {
   title: string;
@@ -15,19 +14,16 @@ type TProductInfo = {
 };
 
 const ProductInfo = ({ title, price, description }: TProductInfo) => {
-  const [quantity, setQuantity] = useState(0);
   const dispatch = useDispatch();
+  const quantity = useSelector((state: any) => state.dataTransaction.quantity);
+
+  const total = +price * quantity;
 
   const handleOpenModal = () => {
     dispatch(savePaymentData({ prop: "isDialogOpen", data: true }));
-  };
-
-  const handleQuantity = (quantityProduct: number) => {
-    if (quantityProduct < 0) {
-      setQuantity(0);
-      return;
-    }
-    setQuantity(quantityProduct);
+    dispatch(savePaymentData({ prop: "price", data: +price }));
+    dispatch(savePaymentData({ prop: "total", data: total }));
+    dispatch(savePaymentData({ prop: "nameProduct", data: title }));
   };
 
   return (
@@ -48,17 +44,18 @@ const ProductInfo = ({ title, price, description }: TProductInfo) => {
         </Typography>
       </Grid>
       <Grid item>
-        <QuantitySelector handleQuantity={handleQuantity} quantity={quantity} />
+        <QuantitySelector />
       </Grid>
       <Grid item xs={12} display="flex" justifyContent="center">
         <Button
+          disabled={quantity === 0}
           variant="contained"
           color="success"
           disableElevation
           style={{ borderRadius: "10px" }}
           onClick={handleOpenModal}
         >
-          Pay with credit card - {`$${+price * quantity}.00`}
+          Pay with credit card - {`$${total.toFixed(2).toLocaleString()}`}
         </Button>
       </Grid>
     </Grid>
