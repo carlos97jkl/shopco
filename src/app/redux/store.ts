@@ -1,11 +1,11 @@
 // @packages
-import slices from "./slices";
 import { configureStore } from "@reduxjs/toolkit";
 
+// @scripts
+import rootReducer from "./slices";
+
 export const store = configureStore({
-  reducer: {
-    dataTransaction: slices,
-  },
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
