@@ -1,14 +1,12 @@
 "use client";
+
 // @packages
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-// @constants
-const localStorageKey = "transaction-data";
 
 const initialState = { show: false, message: "" };
 
 const alert = createSlice({
-  name: "counter",
+  name: "global-alert",
   initialState: initialState,
   reducers: {
     openSnackbar: (state, action: PayloadAction<string>) => {

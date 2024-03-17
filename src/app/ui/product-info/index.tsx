@@ -1,12 +1,20 @@
 "use client";
 
-import { savePaymentData } from "@/app/redux/slices/transaction";
-import QuantitySelector from "@/app/ui/molecules/quantity-selector";
-import { Button } from "@mui/material";
+// @packages
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { useTranslations } from "next-intl";
+import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslations } from "next-intl";
+
+// @scripts
+import QuantitySelector from "@/app/ui/molecules/quantity-selector";
+import { formatCurrency } from "@/app/utils/commonFunctions";
+import { openDialog } from "@/app/redux/slices/dialog";
+import { savePaymentData } from "@/app/redux/slices/transaction";
+
+// @types
+import { RootState } from "@/app/redux/store";
 
 type TProductInfo = {
   title: string;
@@ -17,15 +25,17 @@ type TProductInfo = {
 const ProductInfo = ({ title, price, description }: TProductInfo) => {
   const t = useTranslations();
   const dispatch = useDispatch();
-  const quantity = useSelector((state: any) => state.dataTransaction.quantity);
+  const quantity = useSelector(
+    (state: RootState) => state.dataTransaction.quantity,
+  );
 
   const total = +price * quantity;
 
   const handleOpenModal = () => {
-    dispatch(savePaymentData({ prop: "isDialogOpen", data: true }));
+    dispatch(openDialog());
+    dispatch(savePaymentData({ prop: "nameProduct", data: title }));
     dispatch(savePaymentData({ prop: "price", data: +price }));
     dispatch(savePaymentData({ prop: "total", data: total }));
-    dispatch(savePaymentData({ prop: "nameProduct", data: title }));
   };
 
   return (
@@ -41,8 +51,8 @@ const ProductInfo = ({ title, price, description }: TProductInfo) => {
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subtitle1">
-          <b>{t("price")}:</b>
-          {` $${price}.00`}
+          <b>{`${t("price")}: `}</b>
+          {formatCurrency(+price)}
         </Typography>
       </Grid>
       <Grid item>
@@ -57,7 +67,7 @@ const ProductInfo = ({ title, price, description }: TProductInfo) => {
           style={{ borderRadius: "10px" }}
           onClick={handleOpenModal}
         >
-          {t("payWithCreditCard")} - {`$${total.toFixed(2).toLocaleString()}`}
+          {t("payWithCreditCard")} - {formatCurrency(total)}
         </Button>
       </Grid>
     </Grid>

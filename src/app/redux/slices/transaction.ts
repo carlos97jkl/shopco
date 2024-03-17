@@ -1,47 +1,46 @@
 "use client";
+
 // @packages
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+// @scripts
+import {
+  getItemLocalStorage,
+  storeOnLocalStorage,
+} from "@/app/utils/commonFunctions";
+
 // @constants
 const localStorageKey = "transaction-data";
-
-const initialState: { [key: string]: boolean | string | number | null } = {
-  quantity: 0,
+const initialState = {
   cardNumber: null,
-  expiryDate: null,
-  securityCode: null,
-  cardholderName: null,
   cardholderID: null,
-  numberOfPayments: 1,
-  isCheckedData: false,
-  isDialogOpen: false,
-  price: 0,
-  total: 0,
+  cardholderName: null,
+  expiryDate: null,
   nameProduct: "",
+  numberOfPayments: 1,
+  price: 0,
+  quantity: 0,
+  securityCode: null,
+  total: 0,
 };
-
-const getTransactionData = () => {
-  const transactionData = localStorage.getItem(localStorageKey);
-  return transactionData ? JSON.parse(transactionData) : initialState;
-};
-
-const storeTransactionData = (dataSave: any) => {
-  localStorage.setItem(localStorageKey, JSON.stringify(dataSave));
-};
+export type TTransaction = keyof typeof initialState;
 
 const transaction = createSlice({
-  name: "counter",
-  initialState: getTransactionData(),
+  name: "data-transaction",
+  initialState: getItemLocalStorage(localStorageKey) || initialState,
   reducers: {
     savePaymentData: (
       state,
-      action: PayloadAction<{ prop: string; data: string | number | boolean }>,
+      action: PayloadAction<{
+        prop: TTransaction;
+        data: string | number | boolean;
+      }>,
     ) => {
       state[action.payload.prop] = action.payload.data;
-      storeTransactionData(state);
+      storeOnLocalStorage(localStorageKey, state);
     },
     deletePaymentData: () => {
-      storeTransactionData(initialState);
+      storeOnLocalStorage(localStorageKey, initialState);
       return initialState;
     },
   },

@@ -1,36 +1,39 @@
 "use client";
 
 // @packages
-import DialogTitle from "@mui/material/DialogTitle";
-import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import CloseIcon from "@mui/icons-material/Close";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { usePaymentInputs } from "react-payment-inputs";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
   Grid,
-  IconButton,
   Step,
   StepButton,
   Stepper,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import FormCreditCard from "@/app/ui/molecules/form-credit-card";
+
+// @scripts
 import BuySummary from "@/app/ui/molecules/buy-summary";
-import { useSelector, useDispatch } from "react-redux";
-import { savePaymentData } from "@/app/redux/slices/transaction";
-import { useForm } from "react-hook-form";
+import CommonDialog from "@/app/ui/common/dialog";
+import FormCreditCard from "@/app/ui/molecules/form-credit-card";
+import useReplaceUrl from "@/app/hooks/useReplaceQuery";
+import { closeDialog } from "@/app/redux/slices/dialog";
 import { schema } from "./schema";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { usePaymentInputs } from "react-payment-inputs";
+import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 // @styles
 import styles from "./index.module.css";
-import { useSearchParams } from "next/navigation";
-import useReplaceUrl from "@/app/lib/hooks/useReplaceQuery";
-import { useTranslations } from "next-intl";
+
+// @types
+import { RootState } from "@/app/redux/store";
 
 const ModalCheckout = () => {
   const t = useTranslations();
@@ -74,12 +77,10 @@ const ModalCheckout = () => {
     },
   ];
 
-  const isOpenModal = useSelector(
-    (state: any) => state.dataTransaction.isDialogOpen,
-  );
+  const isOpenModal = useSelector((state: RootState) => state.dialog);
 
   const handleCloseModal = () => {
-    dispatch(savePaymentData({ prop: "isDialogOpen", data: false }));
+    dispatch(closeDialog());
   };
 
   const handleBack = () => {
@@ -99,92 +100,81 @@ const ModalCheckout = () => {
   };
 
   return (
-    <Dialog open={isOpenModal || confirmBuy} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h5">
-            {confirmBuy ? t("buyConfirmation") : t("checkoutPayment")}
-          </Typography>
-          {!confirmBuy && (
-            <IconButton size="medium" onClick={handleCloseModal}>
-              <CloseIcon fontSize="medium" />
-            </IconButton>
-          )}
-        </div>
-      </DialogTitle>
-      {confirmBuy && (
-        <>
-          <DialogContent className={styles.dialogContent}>
-            <Grid p="20px">
-              <Typography variant="h6" align="center">
-                {t("paymentSuccess")}
-              </Typography>
-            </Grid>
-          </DialogContent>
-          <Grid
-            display="flex"
-            justifyContent="end"
-            style={{ padding: "10px 20px" }}
-          >
-            <Button
-              color="error"
-              variant="contained"
-              onClick={() => {
-                replaceUrl("confirmBuy", "");
-              }}
-            >
-              {t("close")}
-            </Button>
-          </Grid>
-        </>
-      )}
-      {!confirmBuy && (
-        <>
-          <DialogContent className={styles.dialogContent}>
-            <Stepper activeStep={activeStep}>
-              {steps.map(({ title }, index) => (
-                <Step key={title} completed={activeStep > index}>
-                  <StepButton color="inherit">{title}</StepButton>
-                </Step>
-              ))}
-            </Stepper>
-            {steps.map(({ title, component }, index) => (
-              <>
-                {index === activeStep && (
-                  <Grid p="20px" key={title}>
-                    {component()}
-                  </Grid>
-                )}
-              </>
+    <>
+      <CommonDialog
+        isOpenDialog={isOpenModal}
+        size="sm"
+        title={t("checkoutPayment")}
+        closeDialog={handleCloseModal}
+      >
+        <DialogContent className={styles.dialogContent}>
+          <Stepper activeStep={activeStep}>
+            {steps.map(({ title }, index) => (
+              <Step key={title} completed={activeStep > index}>
+                <StepButton color="inherit">{title}</StepButton>
+              </Step>
             ))}
-          </DialogContent>
-          <Grid
-            container
-            justifyContent="space-between"
-            style={{ padding: "10px 20px" }}
+          </Stepper>
+          {steps.map(({ title, component }, index) => (
+            <React.Fragment key={title}>
+              {index === activeStep && <Grid p="20px">{component()}</Grid>}
+            </React.Fragment>
+          ))}
+        </DialogContent>
+        <Grid
+          container
+          justifyContent="space-between"
+          style={{ padding: "10px 20px" }}
+        >
+          <Button
+            color="primary"
+            disabled={activeStep === 0}
+            onClick={handleBack}
           >
-            <Button
-              color="primary"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              <KeyboardArrowLeft /> {t("back")}
-            </Button>
-            <Button
-              color="primary"
-              disabled={activeStep === steps.length - 1}
-              onClick={
-                activeStep === 0
-                  ? handleSubmit(onSubmit)
-                  : handleStep(activeStep + 1)
-              }
-            >
-              {t("next")} <KeyboardArrowRight />
-            </Button>
+            <KeyboardArrowLeft /> {t("back")}
+          </Button>
+          <Button
+            color="primary"
+            disabled={activeStep === steps.length - 1}
+            onClick={
+              activeStep === 0
+                ? handleSubmit(onSubmit)
+                : handleStep(activeStep + 1)
+            }
+          >
+            {t("next")} <KeyboardArrowRight />
+          </Button>
+        </Grid>
+      </CommonDialog>
+      <CommonDialog
+        isOpenDialog={!!confirmBuy}
+        size="sm"
+        title={t("buyConfirmation")}
+      >
+        <DialogContent className={styles.dialogContent}>
+          <Grid p="20px">
+            <Typography variant="h6" align="center">
+              {t("paymentSuccess")}
+            </Typography>
           </Grid>
-        </>
-      )}
-    </Dialog>
+        </DialogContent>
+        <Grid
+          display="flex"
+          justifyContent="end"
+          style={{ padding: "10px 20px" }}
+        >
+          <Button
+            color="error"
+            variant="contained"
+            onClick={() => {
+              replaceUrl("confirmBuy", "");
+            }}
+          >
+            {t("close")}
+          </Button>
+        </Grid>
+      </CommonDialog>
+    </>
   );
 };
 
