@@ -30,8 +30,13 @@ import { usePaymentInputs } from "react-payment-inputs";
 import styles from "./index.module.css";
 import { verifyPay } from "@/app/lib/actions";
 import { openSnackbar } from "@/app/redux/slices/alert";
+import { useSearchParams } from "next/navigation";
+import useReplaceUrl from "@/app/lib/hooks/commonFunctions";
 
 const ModalCheckout = () => {
+  const params = useSearchParams();
+  const { replaceUrl } = useReplaceUrl();
+  const confirmBuy = params.get("confirmBuy");
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useDispatch();
   const paymentInputs = usePaymentInputs();
@@ -85,57 +90,91 @@ const ModalCheckout = () => {
   };
 
   return (
-    <Dialog open={isOpenModal} maxWidth="sm" fullWidth>
+    <Dialog open={isOpenModal || confirmBuy} maxWidth="sm" fullWidth>
       <DialogTitle>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h5">Payment Checkout</Typography>
-          <IconButton size="medium" onClick={handleCloseModal}>
-            <CloseIcon fontSize="medium" />
-          </IconButton>
+          <Typography variant="h5">
+            {confirmBuy ? "Buy confirmation" : "Checkout Payment"}
+          </Typography>
+          {!confirmBuy && (
+            <IconButton size="medium" onClick={handleCloseModal}>
+              <CloseIcon fontSize="medium" />
+            </IconButton>
+          )}
         </div>
       </DialogTitle>
-      <DialogContent className={styles.dialogContent}>
-        <Stepper activeStep={activeStep}>
-          {steps.map(({ title }, index) => (
-            <Step key={title} completed={activeStep > index}>
-              <StepButton color="inherit">{title}</StepButton>
-            </Step>
-          ))}
-        </Stepper>
-        {steps.map(({ title, component }, index) => (
-          <>
-            {index === activeStep && (
-              <Grid p="20px" key={title}>
-                {component()}
-              </Grid>
-            )}
-          </>
-        ))}
-      </DialogContent>
-      <Grid
-        container
-        justifyContent="space-between"
-        style={{ padding: "10px 20px" }}
-      >
-        <Button
-          color="primary"
-          disabled={activeStep === 0}
-          onClick={handleBack}
-        >
-          <KeyboardArrowLeft /> Back
-        </Button>
-        <Button
-          color="primary"
-          disabled={activeStep === steps.length - 1}
-          onClick={
-            activeStep === 0
-              ? handleSubmit(onSubmit)
-              : handleStep(activeStep + 1)
-          }
-        >
-          Next <KeyboardArrowRight />
-        </Button>
-      </Grid>
+      {confirmBuy && (
+        <>
+          <DialogContent className={styles.dialogContent}>
+            <Grid p="20px">
+              <Typography variant="h6" align="center">
+                Your order has been processed successfully!
+              </Typography>
+            </Grid>
+          </DialogContent>
+          <Grid
+            display="flex"
+            justifyContent="end"
+            style={{ padding: "10px 20px" }}
+          >
+            <Button
+              color="error"
+              variant="contained"
+              onClick={() => {
+                replaceUrl("confirmBuy", "");
+              }}
+            >
+              Close
+            </Button>
+          </Grid>
+        </>
+      )}
+      {!confirmBuy && (
+        <>
+          <DialogContent className={styles.dialogContent}>
+            <Stepper activeStep={activeStep}>
+              {steps.map(({ title }, index) => (
+                <Step key={title} completed={activeStep > index}>
+                  <StepButton color="inherit">{title}</StepButton>
+                </Step>
+              ))}
+            </Stepper>
+            {steps.map(({ title, component }, index) => (
+              <>
+                {index === activeStep && (
+                  <Grid p="20px" key={title}>
+                    {component()}
+                  </Grid>
+                )}
+              </>
+            ))}
+          </DialogContent>
+          <Grid
+            container
+            justifyContent="space-between"
+            style={{ padding: "10px 20px" }}
+          >
+            <Button
+              color="primary"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+            >
+              <KeyboardArrowLeft /> Back
+            </Button>
+            <Button
+              color="primary"
+              disabled={activeStep === steps.length - 1}
+              onClick={
+                activeStep === 0
+                  ? handleSubmit(onSubmit)
+                  : handleStep(activeStep + 1)
+              }
+            >
+              Next <KeyboardArrowRight />
+            </Button>
+          </Grid>
+        </>
+      )}
     </Dialog>
   );
 };

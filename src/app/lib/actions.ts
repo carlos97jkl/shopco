@@ -20,12 +20,12 @@ export async function getProduct() {
   });
 }
 
-export async function verifyPay(dataPayment: any) {
+export async function verifyPay(formData: any) {
   const mockDataVerify = {
-    cardNumber: "3400 000000 00000",
+    cardNumber: "3742 454554 00126",
     expiryDate: "02 / 29",
     securityCode: "4444",
   };
 
-  return mockDataVerify.cardNumber === dataPayment.cardNumber;
+  return mockDataVerify.cardNumber === formData.cardNumber;
 }
