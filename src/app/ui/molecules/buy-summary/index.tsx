@@ -4,16 +4,22 @@ import { openSnackbar } from "@/app/redux/slices/alert";
 import { deletePaymentData } from "@/app/redux/slices/transaction";
 import { Button, Divider, Grid } from "@mui/material";
 import { Typography } from "@mui/material";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
+import useReplaceUrl from "@/app/lib/hooks/commonFunctions";
 
 const BuySummary = () => {
   const dispatch = useDispatch();
+  const { replaceUrl } = useReplaceUrl();
   const dataTransaction = useSelector((state: any) => state.dataTransaction);
-  const { nameProduct, price, quantity, numberOfPayments } = dataTransaction;
+  const { nameProduct, price, quantity, numberOfPayments, total } =
+    dataTransaction;
   const handleProcessPayment = async () => {
     const res = await verifyPay(dataTransaction);
     if (res) {
       dispatch(deletePaymentData());
+      replaceUrl("confirmBuy", "true");
     } else {
       dispatch(openSnackbar("Payment Failed"));
     }
