@@ -11,7 +11,6 @@ import {
   IconButton,
   Step,
   StepButton,
-  StepContent,
   Stepper,
   Typography,
 } from "@mui/material";
@@ -22,15 +21,42 @@ import FormCreditCard from "@/app/ui/molecules/form-credit-card";
 import BuySummary from "@/app/ui/molecules/buy-summary";
 import { useSelector, useDispatch } from "react-redux";
 import { savePaymentData } from "@/app/redux/slices/transaction";
+import { useForm } from "react-hook-form";
+import { schema } from "./schema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { usePaymentInputs } from "react-payment-inputs";
 
 // @styles
 import styles from "./index.module.css";
+import { verifyPay } from "@/app/lib/actions";
+import { openSnackbar } from "@/app/redux/slices/alert";
 
 const ModalCheckout = () => {
-  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useDispatch();
+  const paymentInputs = usePaymentInputs();
+  const resolver = yupResolver(schema);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    mode: "onChange",
+    resolver,
+  });
+
   const steps = [
-    { title: "Payment Data", component: () => <FormCreditCard /> },
+    {
+      title: "Payment Data",
+      component: () => (
+        <FormCreditCard
+          paymentInputs={paymentInputs}
+          register={register}
+          errors={errors}
+        />
+      ),
+    },
     { title: "Summary", component: () => <BuySummary /> },
   ];
 
@@ -50,6 +76,14 @@ const ModalCheckout = () => {
     setActiveStep(step);
   };
 
+  const onSubmit = () => {
+    const metaValues = Object.values(paymentInputs.meta.erroredInputs);
+
+    if (metaValues.every((value) => !value)) {
+      handleStep(activeStep + 1)();
+    }
+  };
+
   return (
     <Dialog open={isOpenModal} maxWidth="sm" fullWidth>
       <DialogTitle>
@@ -61,12 +95,10 @@ const ModalCheckout = () => {
         </div>
       </DialogTitle>
       <DialogContent className={styles.dialogContent}>
-        <Stepper nonLinear activeStep={activeStep}>
+        <Stepper activeStep={activeStep}>
           {steps.map(({ title }, index) => (
             <Step key={title} completed={activeStep > index}>
-              <StepButton color="inherit" onClick={handleStep(index)}>
-                {title}
-              </StepButton>
+              <StepButton color="inherit">{title}</StepButton>
             </Step>
           ))}
         </Stepper>
@@ -95,7 +127,11 @@ const ModalCheckout = () => {
         <Button
           color="primary"
           disabled={activeStep === steps.length - 1}
-          onClick={handleStep(activeStep + 1)}
+          onClick={
+            activeStep === 0
+              ? handleSubmit(onSubmit)
+              : handleStep(activeStep + 1)
+          }
         >
           Next <KeyboardArrowRight />
         </Button>

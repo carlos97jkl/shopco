@@ -1,34 +1,24 @@
 "use client";
 import { verifyPay } from "@/app/lib/actions";
 import { openSnackbar } from "@/app/redux/slices/alert";
+import { deletePaymentData } from "@/app/redux/slices/transaction";
 import { Button, Divider, Grid } from "@mui/material";
 import { Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
 const BuySummary = () => {
-  const {
-    cardNumber,
-    expiryDate,
-    numberOfPayments,
-    price,
-    quantity,
-    securityCode,
-    total,
-    nameProduct,
-  } = useSelector((state: any) => state.dataTransaction);
   const dispatch = useDispatch();
+  const dataTransaction = useSelector((state: any) => state.dataTransaction);
+  const { nameProduct, price, quantity, numberOfPayments } = dataTransaction;
   const handleProcessPayment = async () => {
-    const res = await verifyPay({
-      cardNumber: cardNumber,
-      expiryDate: expiryDate,
-      securityCode: securityCode,
-    });
+    const res = await verifyPay(dataTransaction);
     if (res) {
-      alert("Payment Successful");
+      dispatch(deletePaymentData());
     } else {
       dispatch(openSnackbar("Payment Failed"));
     }
   };
+
   return (
     <Grid container xs={12} gap={2}>
       <Grid

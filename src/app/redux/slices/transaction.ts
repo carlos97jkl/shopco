@@ -5,13 +5,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 // @constants
 const localStorageKey = "transaction-data";
 
-const initialState: { [key: string]: boolean | string | number } = {
+const initialState: { [key: string]: boolean | string | number | null } = {
   quantity: 0,
-  cardNumber: "",
-  expiryDate: "",
-  securityCode: "",
-  cardholderName: "",
-  cardholderID: "",
+  cardNumber: null,
+  expiryDate: null,
+  securityCode: null,
+  cardholderName: null,
+  cardholderID: null,
   numberOfPayments: 1,
   isCheckedData: false,
   isDialogOpen: false,
