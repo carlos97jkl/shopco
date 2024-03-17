@@ -28,12 +28,12 @@ import { usePaymentInputs } from "react-payment-inputs";
 
 // @styles
 import styles from "./index.module.css";
-import { verifyPay } from "@/app/lib/actions";
-import { openSnackbar } from "@/app/redux/slices/alert";
 import { useSearchParams } from "next/navigation";
-import useReplaceUrl from "@/app/lib/hooks/commonFunctions";
+import useReplaceUrl from "@/app/lib/hooks/useReplaceQuery";
+import { useTranslations } from "next-intl";
 
 const ModalCheckout = () => {
+  const t = useTranslations();
   const params = useSearchParams();
   const { replaceUrl } = useReplaceUrl();
   const confirmBuy = params.get("confirmBuy");
@@ -46,14 +46,20 @@ const ModalCheckout = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm({
     mode: "onChange",
     resolver,
   });
 
+  const resetForm = () => {
+    reset();
+    setActiveStep(0);
+  };
+
   const steps = [
     {
-      title: "Payment Data",
+      title: t("paymentData"),
       component: () => (
         <FormCreditCard
           paymentInputs={paymentInputs}
@@ -62,7 +68,10 @@ const ModalCheckout = () => {
         />
       ),
     },
-    { title: "Summary", component: () => <BuySummary /> },
+    {
+      title: t("summary"),
+      component: () => <BuySummary resetForm={resetForm} />,
+    },
   ];
 
   const isOpenModal = useSelector(
@@ -94,7 +103,7 @@ const ModalCheckout = () => {
       <DialogTitle>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5">
-            {confirmBuy ? "Buy confirmation" : "Checkout Payment"}
+            {confirmBuy ? t("buyConfirmation") : t("checkoutPayment")}
           </Typography>
           {!confirmBuy && (
             <IconButton size="medium" onClick={handleCloseModal}>
@@ -108,7 +117,7 @@ const ModalCheckout = () => {
           <DialogContent className={styles.dialogContent}>
             <Grid p="20px">
               <Typography variant="h6" align="center">
-                Your order has been processed successfully!
+                {t("paymentSuccess")}
               </Typography>
             </Grid>
           </DialogContent>
@@ -124,7 +133,7 @@ const ModalCheckout = () => {
                 replaceUrl("confirmBuy", "");
               }}
             >
-              Close
+              {t("close")}
             </Button>
           </Grid>
         </>
@@ -159,7 +168,7 @@ const ModalCheckout = () => {
               disabled={activeStep === 0}
               onClick={handleBack}
             >
-              <KeyboardArrowLeft /> Back
+              <KeyboardArrowLeft /> {t("back")}
             </Button>
             <Button
               color="primary"
@@ -170,7 +179,7 @@ const ModalCheckout = () => {
                   : handleStep(activeStep + 1)
               }
             >
-              Next <KeyboardArrowRight />
+              {t("next")} <KeyboardArrowRight />
             </Button>
           </Grid>
         </>
