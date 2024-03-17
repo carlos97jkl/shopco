@@ -2,12 +2,10 @@
 // @packages
 import images from "react-payment-inputs/images";
 import { Grid, TextField } from "@mui/material";
-import { usePaymentInputs } from "react-payment-inputs";
-import { useState } from "react";
 import { savePaymentData } from "@/app/redux/slices/transaction";
 import { useDispatch, useSelector } from "react-redux";
 
-const FormCreditCard = () => {
+const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
   const dispatch = useDispatch();
   const {
     cardNumber,
@@ -17,20 +15,26 @@ const FormCreditCard = () => {
     cardholderID,
     numberOfPayments,
   } = useSelector((state: any) => state.dataTransaction);
+
   const {
+    meta,
     getCVCProps,
     getCardImageProps,
     getCardNumberProps,
     getExpiryDateProps,
-  } = usePaymentInputs();
+  } = paymentInputs;
+
   const handleChangeField = (propSave: string, event: any) => {
     dispatch(savePaymentData({ prop: propSave, data: event.target.value }));
   };
+
   return (
     <Grid container gap={3}>
       <Grid item xs={12}>
         <TextField
+          error={!!meta.erroredInputs.cardNumber && cardNumber !== null}
           fullWidth
+          helperText={cardNumber !== null && meta.erroredInputs.cardNumber}
           label="Credit card number"
           size="small"
           variant="outlined"
@@ -45,7 +49,9 @@ const FormCreditCard = () => {
           inputProps={{
             value: cardNumber,
             ...getCardNumberProps({
-              onChange: (event: any) => handleChangeField("cardNumber", event),
+              onChange: (event: any) => {
+                handleChangeField("cardNumber", event);
+              },
             }),
           }}
         />
@@ -53,30 +59,36 @@ const FormCreditCard = () => {
       <Grid item container justifyContent="space-between">
         <Grid item xs={3}>
           <TextField
+            error={!!meta.erroredInputs.expiryDate && expiryDate !== null}
             fullWidth
+            helperText={expiryDate !== null && meta.erroredInputs.expiryDate}
             label="Expiry date"
             size="small"
             variant="outlined"
             inputProps={{
               value: expiryDate,
               ...getExpiryDateProps({
-                onChange: (event: any) =>
-                  handleChangeField("expiryDate", event),
+                onChange: (event: any) => {
+                  handleChangeField("expiryDate", event);
+                },
               }),
             }}
           />
         </Grid>
         <Grid item xs={8}>
           <TextField
+            error={!!meta.erroredInputs.cvc && securityCode !== null}
             fullWidth
+            helperText={securityCode !== null && meta.erroredInputs.cvc}
             label="Security code (CVC)"
             size="small"
             variant="outlined"
             inputProps={{
               value: securityCode,
               ...getCVCProps({
-                onChange: (event: any) =>
-                  handleChangeField("securityCode", event),
+                onChange: (event: any) => {
+                  handleChangeField("securityCode", event);
+                },
               }),
             }}
           />
@@ -84,35 +96,51 @@ const FormCreditCard = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          error={!!errors.cardholderName}
           fullWidth
+          helperText={errors.cardholderName?.message as string}
           label="Cardholder's name"
           size="small"
-          variant="outlined"
           value={cardholderName}
-          onChange={(event) => handleChangeField("cardholderName", event)}
+          variant="outlined"
+          {...register("cardholderName", {
+            onChange: (event: any) =>
+              handleChangeField("cardholderName", event),
+          })}
         />
       </Grid>
       <Grid item xs={12}>
         <TextField
+          error={!!errors.cardholderID}
           fullWidth
+          helperText={errors.cardholderID?.message as string}
           label="Cardholder ID"
           size="small"
-          variant="outlined"
           value={cardholderID}
-          onChange={(event) => handleChangeField("cardholderID", event)}
+          variant="outlined"
+          {...register("cardholderID", {
+            onChange: (event: any) => handleChangeField("cardholderID", event),
+          })}
         />
       </Grid>
       <Grid item xs={12}>
         <TextField
+          error={!!errors.numberOfPayments}
           fullWidth
+          helperText={errors.numberOfPayments?.message as string}
           label="Number of payments"
+          required
           size="small"
           variant="outlined"
           value={numberOfPayments}
-          onChange={(event) => handleChangeField("numberOfPayments", event)}
+          {...register("numberOfPayments", {
+            onChange: (event: any) =>
+              handleChangeField("numberOfPayments", event),
+          })}
         />
       </Grid>
     </Grid>
   );
 };
+
 export default FormCreditCard;
