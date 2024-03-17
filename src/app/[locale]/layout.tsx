@@ -2,17 +2,18 @@
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { Inter } from "next/font/google";
+import { NextIntlClientProvider, useMessages } from "next-intl";
 import { ThemeProvider } from "@mui/material/styles";
+
+// @scripts
+import Provider from "@/app/redux/provider";
+import SnackBar from "@/app/ui/common/snackbar";
 
 // @styles
 import "./globals.css";
-import { theme } from "../lib/utils/theme";
-import Provider from "../redux/provider";
-import SnackBar from "../ui/common/snackbar";
-import { NextIntlClientProvider, useMessages } from "next-intl";
+import { theme } from "@/app/utils/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 

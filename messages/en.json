@@ -16,12 +16,13 @@
   "paymentData": "Payment data",
   "paymentMethod": "Payment method",
   "paymentSuccess": "Your order has been processed successfully!",
-  "paynow": "Pay now",
+  "payNow": "Pay now",
   "price": "Price",
   "product": "Product",
   "quantity": "Quantity",
   "securityCode": "Security code (CVV)",
   "summary": "Summary",
   "total": "Total",
-  "paymentFailed": "Payment failed"
+  "paymentFailed": "Payment failed",
+  "imageSelector": "Image selector"
 }

@@ -1,29 +1,20 @@
-"use client";
 // @packages
-import ImageViewer from "@/app/ui/organisms/image-viewer";
-import { getProduct } from "@/app/lib/actions";
-import { useEffect, useState } from "react";
+import { Grid, Typography } from "@mui/material";
 
 // @scripts
+import ImageViewer from "@/app/ui/organisms/image-viewer";
 import ModalCheckout from "@/app/ui/organisms/modal-checkout";
 import ProductInfo from "@/app/ui/product-info";
-import { Grid, Typography } from "@mui/material";
+import { getProduct } from "@/app/lib/actions";
 
 // @styles
 import styles from "./page.module.css";
 
-const Home = () => {
-  const [product, setProduct] = useState({} as any);
+// @types
+import { Product } from "@/app/utils/types";
 
-  const getProductData = async () => {
-    const productsData = await getProduct();
-    console.log(productsData);
-    setProduct(productsData);
-  };
-
-  useEffect(() => {
-    getProductData();
-  }, []);
+const Home = async () => {
+  const product: Product = await getProduct();
 
   return (
     <>

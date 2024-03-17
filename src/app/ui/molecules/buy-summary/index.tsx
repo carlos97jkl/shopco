@@ -1,19 +1,26 @@
 "use client";
+
 // @packages
-import { Button, Divider, Grid } from "@mui/material";
-import { Typography } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslations } from "next-intl";
 
 // @scripts
-import useReplaceUrl from "@/app/lib/hooks/useReplaceQuery";
+import SummaryLabel from "@/app/ui/atoms/summary-label";
+import useReplaceUrl from "@/app/hooks/useReplaceQuery";
+import { closeDialog } from "@/app/redux/slices/dialog";
 import { deletePaymentData } from "@/app/redux/slices/transaction";
+import { formatCurrency } from "@/app/utils/commonFunctions";
 import { openSnackbar } from "@/app/redux/slices/alert";
 import { verifyPay } from "@/app/lib/actions";
 
-// @constants
 type TBuySummary = {
   resetForm: () => void;
+};
+
+type TLabel = {
+  label: string;
+  value: string;
 };
 
 const BuySummary = ({ resetForm }: TBuySummary) => {
@@ -23,10 +30,24 @@ const BuySummary = ({ resetForm }: TBuySummary) => {
   const dataTransaction = useSelector((state: any) => state.dataTransaction);
   const { nameProduct, price, quantity, numberOfPayments, total } =
     dataTransaction;
+
+  const labels: TLabel[] = [
+    { label: t("product"), value: nameProduct },
+    { label: t("price"), value: formatCurrency(price) },
+    { label: t("quantity"), value: quantity },
+    {
+      label: t("numberOfPayments"),
+      value: `${numberOfPayments}x ${formatCurrency(total / numberOfPayments)}`,
+    },
+    { label: t("paymentMethod"), value: t("creditCard") },
+    { label: t("total"), value: formatCurrency(total) },
+  ];
+
   const handleProcessPayment = async () => {
     const res = await verifyPay(dataTransaction);
     if (res) {
       dispatch(deletePaymentData());
+      dispatch(closeDialog());
       replaceUrl("confirmBuy", "true");
       resetForm();
     } else {
@@ -36,92 +57,10 @@ const BuySummary = ({ resetForm }: TBuySummary) => {
 
   return (
     <Grid container xs={12} gap={2}>
-      <Grid
-        item
-        xs={12}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography>
-          <b>{t("product")}:</b>
-        </Typography>
-        <Typography>{nameProduct}</Typography>
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography>
-          <b>{t("price")}:</b>
-        </Typography>
-        <Typography>
-          {Number(price?.toFixed(2)).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography>
-          <b>{t("quantity")}:</b>
-        </Typography>
-        <Typography>{quantity}</Typography>
-      </Grid>
-      <Grid xs={12}>
-        <Divider />
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography>
-          <b>{t("payments")}:</b>
-        </Typography>
-        <Typography>
-          {numberOfPayments}x{" "}
-          {Number((total / numberOfPayments).toFixed(2)).toLocaleString(
-            "en-US",
-            {
-              style: "currency",
-              currency: "USD",
-            },
-          )}
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography>
-          <b>{t("paymentMethod")}:</b>
-        </Typography>
-        <Typography>{t("creditCard")}</Typography>
-      </Grid>
-      <Grid xs={12}>
-        <Divider />
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography>
-          <b>{t("total")}:</b>
-        </Typography>
-        <Typography>
-          {Number(total.toFixed(2)).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}
-        </Typography>
-      </Grid>
-      <Grid xs={12} padding="20px 50px 0px 50px" marginTop="5px">
+      {labels.map(({ label, value }: TLabel) => (
+        <SummaryLabel key={label} label={label} value={value} />
+      ))}
+      <Grid item xs={12} padding="20px 50px 0px 50px" marginTop="5px">
         <Button
           color="success"
           disableElevation

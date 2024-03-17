@@ -1,32 +1,52 @@
 "use client";
+
 // @packages
 import images from "react-payment-inputs/images";
+import { ChangeEvent } from "react";
 import { Grid, TextField } from "@mui/material";
-import { savePaymentData } from "@/app/redux/slices/transaction";
+import { UseFormRegister } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { usePaymentInputs } from "react-payment-inputs";
 import { useTranslations } from "next-intl";
 
-const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
+// @scripts
+import { RootState } from "@/app/redux/store";
+import { TTransaction, savePaymentData } from "@/app/redux/slices/transaction";
+
+type TFormCreditCard = {
+  errors: any;
+  paymentInputs: ReturnType<typeof usePaymentInputs>;
+  register: UseFormRegister<any>;
+};
+
+const FormCreditCard = ({
+  errors,
+  paymentInputs,
+  register,
+}: TFormCreditCard) => {
   const t = useTranslations();
   const dispatch = useDispatch();
   const {
     cardNumber,
-    expiryDate,
-    securityCode,
-    cardholderName,
     cardholderID,
+    cardholderName,
+    expiryDate,
     numberOfPayments,
-  } = useSelector((state: any) => state.dataTransaction);
+    securityCode,
+  } = useSelector((state: RootState) => state.dataTransaction);
 
   const {
-    meta,
     getCVCProps,
     getCardImageProps,
     getCardNumberProps,
     getExpiryDateProps,
+    meta,
   } = paymentInputs;
 
-  const handleChangeField = (propSave: string, event: any) => {
+  const handleChangeField = (
+    propSave: TTransaction,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     dispatch(savePaymentData({ prop: propSave, data: event.target.value }));
   };
 
@@ -51,7 +71,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           inputProps={{
             value: cardNumber,
             ...getCardNumberProps({
-              onChange: (event: any) => {
+              onChange: (event: ChangeEvent<HTMLInputElement>) => {
                 handleChangeField("cardNumber", event);
               },
             }),
@@ -70,7 +90,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
             inputProps={{
               value: expiryDate,
               ...getExpiryDateProps({
-                onChange: (event: any) => {
+                onChange: (event: ChangeEvent<HTMLInputElement>) => {
                   handleChangeField("expiryDate", event);
                 },
               }),
@@ -88,7 +108,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
             inputProps={{
               value: securityCode,
               ...getCVCProps({
-                onChange: (event: any) => {
+                onChange: (event: ChangeEvent<HTMLInputElement>) => {
                   handleChangeField("securityCode", event);
                 },
               }),
@@ -106,7 +126,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           value={cardholderName}
           variant="outlined"
           {...register("cardholderName", {
-            onChange: (event: any) =>
+            onChange: (event: ChangeEvent<HTMLInputElement>) =>
               handleChangeField("cardholderName", event),
           })}
         />
@@ -121,7 +141,8 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           value={cardholderID}
           variant="outlined"
           {...register("cardholderID", {
-            onChange: (event: any) => handleChangeField("cardholderID", event),
+            onChange: (event: ChangeEvent<HTMLInputElement>) =>
+              handleChangeField("cardholderID", event),
           })}
         />
       </Grid>
@@ -133,10 +154,10 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           label={t("numberOfPayments")}
           required
           size="small"
-          variant="outlined"
           value={numberOfPayments}
+          variant="outlined"
           {...register("numberOfPayments", {
-            onChange: (event: any) =>
+            onChange: (event: ChangeEvent<HTMLInputElement>) =>
               handleChangeField("numberOfPayments", event),
           })}
         />

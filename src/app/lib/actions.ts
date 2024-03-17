@@ -1,8 +1,16 @@
 "use server";
 
-export async function getProduct() {
-  // const response = await fetch("https://api.escuelajs.co/api/v1/products/8");
-  // return response.json()
+// @scripts
+import { Product } from "@/app/utils/types";
+
+// @constants
+const mockDataVerify = {
+  cardNumber: "3742 454554 00126",
+  expiryDate: "02 / 29",
+  securityCode: "4444",
+};
+
+export async function getProduct(): Promise<Product> {
   return await new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -20,12 +28,6 @@ export async function getProduct() {
   });
 }
 
-export async function verifyPay(formData: any) {
-  const mockDataVerify = {
-    cardNumber: "3742 454554 00126",
-    expiryDate: "02 / 29",
-    securityCode: "4444",
-  };
-
+export async function verifyPay(formData: typeof mockDataVerify) {
   return mockDataVerify.cardNumber === formData.cardNumber;
 }
