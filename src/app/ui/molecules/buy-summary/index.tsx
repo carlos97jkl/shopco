@@ -1,15 +1,23 @@
 "use client";
-import { verifyPay } from "@/app/lib/actions";
-import { openSnackbar } from "@/app/redux/slices/alert";
-import { deletePaymentData } from "@/app/redux/slices/transaction";
+// @packages
 import { Button, Divider, Grid } from "@mui/material";
 import { Typography } from "@mui/material";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import useReplaceUrl from "@/app/lib/hooks/commonFunctions";
+import { useTranslations } from "next-intl";
 
-const BuySummary = () => {
+// @scripts
+import useReplaceUrl from "@/app/lib/hooks/useReplaceQuery";
+import { deletePaymentData } from "@/app/redux/slices/transaction";
+import { openSnackbar } from "@/app/redux/slices/alert";
+import { verifyPay } from "@/app/lib/actions";
+
+// @constants
+type TBuySummary = {
+  resetForm: () => void;
+};
+
+const BuySummary = ({ resetForm }: TBuySummary) => {
+  const t = useTranslations();
   const dispatch = useDispatch();
   const { replaceUrl } = useReplaceUrl();
   const dataTransaction = useSelector((state: any) => state.dataTransaction);
@@ -20,8 +28,9 @@ const BuySummary = () => {
     if (res) {
       dispatch(deletePaymentData());
       replaceUrl("confirmBuy", "true");
+      resetForm();
     } else {
-      dispatch(openSnackbar("Payment Failed"));
+      dispatch(openSnackbar(t("paymentFailed")));
     }
   };
 
@@ -33,7 +42,7 @@ const BuySummary = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography>
-          <b>Product:</b>
+          <b>{t("product")}:</b>
         </Typography>
         <Typography>{nameProduct}</Typography>
       </Grid>
@@ -43,7 +52,7 @@ const BuySummary = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography>
-          <b>Price:</b>
+          <b>{t("price")}:</b>
         </Typography>
         <Typography>
           {Number(price?.toFixed(2)).toLocaleString("en-US", {
@@ -58,7 +67,7 @@ const BuySummary = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography>
-          <b>Quantity:</b>
+          <b>{t("quantity")}:</b>
         </Typography>
         <Typography>{quantity}</Typography>
       </Grid>
@@ -71,7 +80,7 @@ const BuySummary = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography>
-          <b>Payments:</b>
+          <b>{t("payments")}:</b>
         </Typography>
         <Typography>
           {numberOfPayments}x{" "}
@@ -90,9 +99,9 @@ const BuySummary = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography>
-          <b>Payment Method:</b>
+          <b>{t("paymentMethod")}:</b>
         </Typography>
-        <Typography>Credit Card</Typography>
+        <Typography>{t("creditCard")}</Typography>
       </Grid>
       <Grid xs={12}>
         <Divider />
@@ -103,7 +112,7 @@ const BuySummary = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography>
-          <b>Total:</b>
+          <b>{t("total")}:</b>
         </Typography>
         <Typography>
           {Number(total.toFixed(2)).toLocaleString("en-US", {
@@ -114,14 +123,14 @@ const BuySummary = () => {
       </Grid>
       <Grid xs={12} padding="20px 50px 0px 50px" marginTop="5px">
         <Button
-          onClick={handleProcessPayment}
-          fullWidth
-          variant="contained"
           color="success"
           disableElevation
+          fullWidth
+          onClick={handleProcessPayment}
           style={{ borderRadius: "10px" }}
+          variant="contained"
         >
-          Pay Now
+          {t("payNow")}
         </Button>
       </Grid>
     </Grid>

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 // @scripts
 import ModalCheckout from "@/app/ui/organisms/modal-checkout";
-import ProductInfo from "@/app/ui/organisms/product-info";
+import ProductInfo from "@/app/ui/product-info";
 import { Grid, Typography } from "@mui/material";
 
 // @styles

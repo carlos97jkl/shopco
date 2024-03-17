@@ -4,8 +4,10 @@ import images from "react-payment-inputs/images";
 import { Grid, TextField } from "@mui/material";
 import { savePaymentData } from "@/app/redux/slices/transaction";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslations } from "next-intl";
 
 const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
+  const t = useTranslations();
   const dispatch = useDispatch();
   const {
     cardNumber,
@@ -35,7 +37,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           error={!!meta.erroredInputs.cardNumber && cardNumber !== null}
           fullWidth
           helperText={cardNumber !== null && meta.erroredInputs.cardNumber}
-          label="Credit card number"
+          label={t("creditCardNumber")}
           size="small"
           variant="outlined"
           InputProps={{
@@ -62,7 +64,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
             error={!!meta.erroredInputs.expiryDate && expiryDate !== null}
             fullWidth
             helperText={expiryDate !== null && meta.erroredInputs.expiryDate}
-            label="Expiry date"
+            label={t("expiryDate")}
             size="small"
             variant="outlined"
             inputProps={{
@@ -80,7 +82,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
             error={!!meta.erroredInputs.cvc && securityCode !== null}
             fullWidth
             helperText={securityCode !== null && meta.erroredInputs.cvc}
-            label="Security code (CVC)"
+            label={t("securityCode")}
             size="small"
             variant="outlined"
             inputProps={{
@@ -99,7 +101,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           error={!!errors.cardholderName}
           fullWidth
           helperText={errors.cardholderName?.message as string}
-          label="Cardholder's name"
+          label={t("cardholderName")}
           size="small"
           value={cardholderName}
           variant="outlined"
@@ -114,7 +116,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           error={!!errors.cardholderID}
           fullWidth
           helperText={errors.cardholderID?.message as string}
-          label="Cardholder ID"
+          label={t("cardholderID")}
           size="small"
           value={cardholderID}
           variant="outlined"
@@ -128,7 +130,7 @@ const FormCreditCard = ({ paymentInputs, register, errors }: any) => {
           error={!!errors.numberOfPayments}
           fullWidth
           helperText={errors.numberOfPayments?.message as string}
-          label="Number of payments"
+          label={t("numberOfPayments")}
           required
           size="small"
           variant="outlined"

@@ -8,8 +8,10 @@ import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 import { savePaymentData } from "@/app/redux/slices/transaction";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslations } from "next-intl";
 
 const QuantitySelector = () => {
+  const t = useTranslations();
   const quantity = useSelector((state: any) => state.dataTransaction.quantity);
   const dispatch = useDispatch();
 
@@ -25,7 +27,7 @@ const QuantitySelector = () => {
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="subtitle1">
-          <b>Quantity</b>
+          <b>{t("quantity")}</b>
         </Typography>
       </Grid>
       <Grid item display="flex" alignContent="center">

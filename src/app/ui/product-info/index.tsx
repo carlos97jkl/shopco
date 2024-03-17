@@ -5,6 +5,7 @@ import QuantitySelector from "@/app/ui/molecules/quantity-selector";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { useTranslations } from "next-intl";
 import { useDispatch, useSelector } from "react-redux";
 
 type TProductInfo = {
@@ -14,6 +15,7 @@ type TProductInfo = {
 };
 
 const ProductInfo = ({ title, price, description }: TProductInfo) => {
+  const t = useTranslations();
   const dispatch = useDispatch();
   const quantity = useSelector((state: any) => state.dataTransaction.quantity);
 
@@ -33,13 +35,13 @@ const ProductInfo = ({ title, price, description }: TProductInfo) => {
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subtitle2">
-          <b>About this article:</b>
+          <b>{t("aboutThisArticle")}:</b>
         </Typography>
         <Typography variant="subtitle2">{description}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subtitle1">
-          <b>Price:</b>
+          <b>{t("price")}:</b>
           {` $${price}.00`}
         </Typography>
       </Grid>
@@ -55,7 +57,7 @@ const ProductInfo = ({ title, price, description }: TProductInfo) => {
           style={{ borderRadius: "10px" }}
           onClick={handleOpenModal}
         >
-          Pay with credit card - {`$${total.toFixed(2).toLocaleString()}`}
+          {t("payWithCreditCard")} - {`$${total.toFixed(2).toLocaleString()}`}
         </Button>
       </Grid>
     </Grid>
