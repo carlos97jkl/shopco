@@ -46,4 +46,26 @@ describe("Image viewer", () => {
     const contentElement = screen.getByText("Checkout payment");
     expect(contentElement).toBeDefined();
   });
+
+  it("it should forward of step", async () => {
+    const nextButton = screen.getByText("Next");
+    act(() => {
+      fireEvent.click(nextButton);
+    });
+    const summaryTitle = await screen.findByText("Summary");
+    expect(summaryTitle).toBeDefined();
+  });
+
+  it("it should back step", async () => {
+    const nextButton = screen.getByText("Next");
+    act(() => {
+      fireEvent.click(nextButton);
+    });
+    const backButton = screen.getByText("Back");
+    act(() => {
+      fireEvent.click(backButton);
+    });
+    const summaryTitle = await screen.findByText("Payment data");
+    expect(summaryTitle).toBeDefined();
+  });
 });

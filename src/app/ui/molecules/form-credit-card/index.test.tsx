@@ -3,6 +3,7 @@ import FormCreditCard from "./index";
 import { renderWithProviders } from "@/app/utils/test-utils";
 
 describe("form credit card", () => {
+  let stateData: any = null;
   const mockData = {
     cardNumber: "3742 454554 00126",
     cardholderID: "1234567890",
@@ -26,7 +27,7 @@ describe("form credit card", () => {
   const register = jest.fn();
 
   beforeEach(() => {
-    const store = renderWithProviders(
+    const { store } = renderWithProviders(
       <FormCreditCard
         errors={{}}
         paymentInputs={paymentInputs as any}
@@ -36,6 +37,7 @@ describe("form credit card", () => {
         dataTransaction: mockData,
       },
     );
+    stateData = store.getState().dataTransaction;
   });
 
   afterEach(() => {

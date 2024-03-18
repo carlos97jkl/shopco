@@ -55,6 +55,7 @@ const FormCreditCard = ({
     <Grid container gap={3}>
       <Grid item xs={12}>
         <TextField
+          data-testid="credit-card-number"
           error={!!meta.erroredInputs?.cardNumber && cardNumber !== null}
           fullWidth
           helperText={cardNumber !== null && meta.erroredInputs?.cardNumber}
