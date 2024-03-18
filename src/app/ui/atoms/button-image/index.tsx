@@ -17,6 +17,7 @@ const ButtonImage = ({ url, onClick, isImageSelected }: TButtonImage) => {
 
   return (
     <div
+      data-testid="button-image"
       onClick={onClick}
       className={clsx([
         styles.divImage,

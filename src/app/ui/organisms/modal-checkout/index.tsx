@@ -136,11 +136,7 @@ const ModalCheckout = () => {
           <Button
             color="primary"
             disabled={activeStep === steps.length - 1}
-            onClick={
-              activeStep === 0
-                ? handleSubmit(onSubmit)
-                : handleStep(activeStep + 1)
-            }
+            onClick={handleSubmit(onSubmit)}
           >
             {t("next")} <KeyboardArrowRight />
           </Button>

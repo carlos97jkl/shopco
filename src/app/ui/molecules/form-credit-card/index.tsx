@@ -24,6 +24,7 @@ const FormCreditCard = ({
   paymentInputs,
   register,
 }: TFormCreditCard) => {
+  const imagesCard = images as any;
   const t = useTranslations();
   const dispatch = useDispatch();
   const {
@@ -54,16 +55,17 @@ const FormCreditCard = ({
     <Grid container gap={3}>
       <Grid item xs={12}>
         <TextField
-          error={!!meta.erroredInputs.cardNumber && cardNumber !== null}
+          data-testid="credit-card-number"
+          error={!!meta.erroredInputs?.cardNumber && cardNumber !== null}
           fullWidth
-          helperText={cardNumber !== null && meta.erroredInputs.cardNumber}
+          helperText={cardNumber !== null && meta.erroredInputs?.cardNumber}
           label={t("creditCardNumber")}
           size="small"
           variant="outlined"
           InputProps={{
             startAdornment: (
               <svg
-                {...getCardImageProps({ images })}
+                {...getCardImageProps({ images: imagesCard })}
                 style={{ paddingRight: "5px" }}
               />
             ),
@@ -81,9 +83,9 @@ const FormCreditCard = ({
       <Grid item container justifyContent="space-between">
         <Grid item xs={3}>
           <TextField
-            error={!!meta.erroredInputs.expiryDate && expiryDate !== null}
+            error={!!meta.erroredInputs?.expiryDate && expiryDate !== null}
             fullWidth
-            helperText={expiryDate !== null && meta.erroredInputs.expiryDate}
+            helperText={expiryDate !== null && meta.erroredInputs?.expiryDate}
             label={t("expiryDate")}
             size="small"
             variant="outlined"
@@ -99,9 +101,9 @@ const FormCreditCard = ({
         </Grid>
         <Grid item xs={8}>
           <TextField
-            error={!!meta.erroredInputs.cvc && securityCode !== null}
+            error={!!meta.erroredInputs?.cvc && securityCode !== null}
             fullWidth
-            helperText={securityCode !== null && meta.erroredInputs.cvc}
+            helperText={securityCode !== null && meta.erroredInputs?.cvc}
             label={t("securityCode")}
             size="small"
             variant="outlined"

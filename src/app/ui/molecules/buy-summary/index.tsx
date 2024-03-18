@@ -56,7 +56,7 @@ const BuySummary = ({ resetForm }: TBuySummary) => {
   };
 
   return (
-    <Grid container xs={12} gap={2}>
+    <Grid container gap={2}>
       {labels.map(({ label, value }: TLabel) => (
         <SummaryLabel key={label} label={label} value={value} />
       ))}

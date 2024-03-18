@@ -24,6 +24,7 @@ const ImageViewer = ({ imageList = [] }: TImageViewer) => {
       <Grid className={styles.imageViewer} item xs={12}>
         <div className={styles.productImageWrapper}>
           <img
+            data-testid="product-image"
             alt="Product Image"
             className={styles.productImage}
             src={currentImage || imageList[1]}
