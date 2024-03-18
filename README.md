@@ -21,6 +21,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ### How to use
+
 Welcome! In the next steps, you can see how to use the app and this is the link that you can interact with the app [Link to app](https://main.dkpw63iosul0x.amplifyapp.com/en) :
 
 ### 1. Product Detail
@@ -50,6 +51,12 @@ If you type the correct data, as you can see in Step 2, the app will show the ne
 Otherwise, it will show you a toast error like this
 
 ![image](https://github.com/carlos97jkl/shopco/assets/26122890/bb2493a1-432f-47c7-822f-eef0a67bc386)
+
+
+### Test Coverage
+
+![image](https://github.com/carlos97jkl/shopco/assets/26122890/c5194e7b-2e34-4f45-b3f4-31fc3ee19043)
+
 
 ## Learn More
 
